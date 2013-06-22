@@ -9,10 +9,13 @@ body {
 
 .wall .block {
   float: left;
-  background-position: center center;
-  background-size: cover;
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position: center -999px;
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -ms-transition: all 1s ease;
   -o-transition: all 1s ease;
   transition: all 1s ease; }
+
+  .wall .block.visible { background-position: center center; }

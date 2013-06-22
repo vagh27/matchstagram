@@ -25,7 +25,7 @@
     <!-- wall template -->
     <script type="text/backbone" id="wall">
       <% _.each(images, function(image,index) { %>
-        <div class="block" style="background-image:url(<%= image %>)"><%= index %></div>
+        <div class="block" style="background-image:url(<%= image %>)" rel="<%= index %>"></div>
       <% }); %>
     </script>
 
