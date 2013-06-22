@@ -21,7 +21,8 @@ $(function() {
 				}
 				that.build(picArray);
     		});
-			//that.build(picArray);
+    		//test without using the api call
+			//that.build(data);
 		},
 		build: function(picArray){
 			var col = this.options.col,
@@ -53,19 +54,21 @@ $(function() {
 			var template = _.template($("#wall").html(), { images : newArray});
 			this.$el.html(template);
 			$('.block').css({width:blkWidth, height:blkHeight});
-			setTimeout(this.show(total), 0);
+			this.show(total);
 		},
 		show: function(total){
 			var nums = [],
 				that = this,
 				b = 0,
 				trigger = true;
-			for (var i = 0; i < total; i++) {
-			    nums.push(i);
-			}
 
+			//array of numbers
+			for (var i = 0; i < total; i++) { nums.push(i); }
+
+			//shuffle 'em
 			this.shuffle(nums);
 
+			//show blocks randomly, then hide them once all displayed
 			var b = 0;
 			function blast(i){
 				that.$el.find('.block').eq(nums[i]).addClass('visible');
