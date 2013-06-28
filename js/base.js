@@ -1,13 +1,29 @@
 $(function() {
 
+	window.TileModel = Backbone.Model.extend({
+		defaults: {
+			row: 5,
+			col: 4,
+			tag: 'puppies'
+		},
+		validate: function(attrs, options) {
+			var intRegex = /^\d+$/;
+		    if(!attrs.tag || !attrs.row || !attrs.col){
+		    	alert('you forgot to fill out all the fields, here are some puppies...');
+		    	return "false";
+		    }
+		    if(!intRegex.test(attrs.row) || !intRegex.test(attrs.col)) {
+			   alert('you\'re not using whole numbers, here are some puppies...');
+			   return "false";
+			}
+		},
+	});
+
 	window.SearchView = Backbone.View.extend({
 		el : '.wall',
-		tag: 'test',
-		row : 10,
-		col : 10,
 		initialize : function(options){
-			var accessToken = "#",
-    			url = 'https://api.instagram.com/v1/tags/'+options.tag+'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
+			var accessToken = "182641681.f59def8.2409a894cf684abdb2ca763819085682",
+    			url = 'https://api.instagram.com/v1/tags/'+ this.model.get('tag') +'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
     		this.render(url); 
 		},
 		render: function(url){
@@ -25,8 +41,8 @@ $(function() {
 			//that.build(data);
 		},
 		build: function(picArray){
-			var col = this.options.col,
-				row = this.options.row,
+			var col = this.model.get('col'),
+				row = this.model.get('row'),
 				total = row*col,
 				length = picArray.length,
 				blkWidth = $(document).width()/col,
@@ -42,7 +58,7 @@ $(function() {
 
 			//create array of images
 			for(var i=0; i <  newTotal/2; i++){
-				var r = Math.floor(Math.random()*(length+1));
+				var r = Math.floor(Math.random()*(length-1));
 				var addPic = picArray[r];
 				newArray.push(addPic); 
 				newArray.push(addPic); 
@@ -80,9 +96,9 @@ $(function() {
 					if(b<total) blast(b); 
 					else if(trigger) { 
 						trigger =  false;
-						setTimeout(function(){ that.$el.find('.block').removeClass('visible'); alert('activated'); }, 2000);
+						//setTimeout(function(){ that.$el.find('.block').removeClass('visible'); alert('activated'); }, 2000);
 					}
-				}, 400);
+				}, 200);
 			},2000);
 			
 
@@ -118,10 +134,12 @@ $(function() {
 			var tag = this.$el.find('.tag').val(),
 				row = this.$el.find('.row').val(),
 				col = this.$el.find('.col').val();
-			var searchView = new SearchView({tag:tag, row:row, col:col});  
+			tile.set({ tag:tag, row:row, col:col }, {validate: true})
+			var searchView = new SearchView({model:tile});  
 		}
 	}); 
 
+	var tile = new TileModel();
     var formView = new FormView(); 
     
 });
