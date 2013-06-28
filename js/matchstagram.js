@@ -22,23 +22,23 @@ $(function() {
 	window.SearchView = Backbone.View.extend({
 		el : '.wall',
 		initialize : function(options){
-			var accessToken = "#",
+			var accessToken = "",
     			url = 'https://api.instagram.com/v1/tags/'+ this.model.get('tag') +'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
     		this.render(url); 
 		},
 		render: function(url){
 			var picArray = [],
 				that = this;
-			$.getJSON(url, function(json) {
+			/*$.getJSON(url, function(json) {
     			var dataLength = json.data.length;
 				for(var i=0; i < dataLength; i++){
 					var picImage = json.data[i].images.standard_resolution.url;
 					picArray.push(picImage); 
 				}
 				that.build(picArray);
-    		});
+    		});*/
     		//test without using the api call
-			//that.build(data);
+			that.build(data);
 		},
 		build: function(picArray){
 			var col = this.model.get('col'),
@@ -76,7 +76,7 @@ $(function() {
 			var nums = [],
 				that = this,
 				b = 0,
-				trigger = true;
+				showTile = null;
 
 			//array of numbers
 			for (var i = 0; i < total; i++) { nums.push(i); }
@@ -84,7 +84,7 @@ $(function() {
 			//shuffle 'em
 			this.shuffle(nums);
 
-			//show blocks randomly, then hide them once all displayed
+			//show tiles randomly, then hide them once all displayed
 			var b = 0;
 			function blast(i){
 				that.$el.find('.block').eq(nums[i]).addClass('visible');
@@ -92,13 +92,13 @@ $(function() {
 			}
 
 			setTimeout(function(){
-				setInterval(function() { 
-					if(b<total) blast(b); 
-					else if(trigger) { 
-						trigger =  false;
-						//setTimeout(function(){ that.$el.find('.block').removeClass('visible'); alert('activated'); }, 2000);
+				var showTile = setInterval(function () {
+			        if(b<total) blast(b); 
+					else{ 
+						clearInterval(showTile);
+						setTimeout(function(){ that.$el.find('.block').removeClass('visible'); alert('match game activated'); }, 2000);
 					}
-				}, 200);
+			    }, 200);
 			},2000);
 			
 
