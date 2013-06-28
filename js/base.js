@@ -22,7 +22,7 @@ $(function() {
 	window.SearchView = Backbone.View.extend({
 		el : '.wall',
 		initialize : function(options){
-			var accessToken = "182641681.f59def8.2409a894cf684abdb2ca763819085682",
+			var accessToken = "#",
     			url = 'https://api.instagram.com/v1/tags/'+ this.model.get('tag') +'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
     		this.render(url); 
 		},
