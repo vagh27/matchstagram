@@ -22,23 +22,23 @@ $(function() {
 	window.SearchView = Backbone.View.extend({
 		el : '.wall',
 		initialize : function(options){
-			var accessToken = "",
+			var accessToken = "#",
     			url = 'https://api.instagram.com/v1/tags/'+ this.model.get('tag') +'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
     		this.render(url); 
 		},
 		render: function(url){
 			var picArray = [],
 				that = this;
-			/*$.getJSON(url, function(json) {
+			$.getJSON(url, function(json) {
     			var dataLength = json.data.length;
 				for(var i=0; i < dataLength; i++){
 					var picImage = json.data[i].images.standard_resolution.url;
 					picArray.push(picImage); 
 				}
 				that.build(picArray);
-    		});*/
+    		});
     		//test without using the api call
-			that.build(data);
+			//that.build(data);
 		},
 		build: function(picArray){
 			var col = this.model.get('col'),
