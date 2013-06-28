@@ -4,7 +4,7 @@ $(function() {
 		defaults: {
 			row: 5,
 			col: 4,
-			tag: 'puppies'
+			tag: '8675309'
 		},
 		validate: function(attrs, options) {
 			var intRegex = /^\d+$/;
@@ -29,16 +29,19 @@ $(function() {
 		render: function(url){
 			var picArray = [],
 				that = this;
-			$.getJSON(url, function(json) {
-    			var dataLength = json.data.length;
-				for(var i=0; i < dataLength; i++){
-					var picImage = json.data[i].images.standard_resolution.url;
-					picArray.push(picImage); 
-				}
-				that.build(picArray);
-    		});
-    		//test without using the api call
-			//that.build(data);
+
+			//if no tag is provided, use data.js and save an api call
+			if(this.model.get('tag')=="8675309") that.build(data);
+			else {
+				$.getJSON(url, function(json) {
+	    			var dataLength = json.data.length;
+					for(var i=0; i < dataLength; i++){
+						var picImage = json.data[i].images.standard_resolution.url;
+						picArray.push(picImage); 
+					}
+					that.build(picArray);
+	    		});
+	    	}
 		},
 		build: function(picArray){
 			var col = this.model.get('col'),
