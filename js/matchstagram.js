@@ -3,7 +3,7 @@ $(function() {
 	window.TileModel = Backbone.Model.extend({
 		defaults: {
 			row: 5,
-			col: 4,
+			col: 5,
 			tag: '8675309'
 		},
 		validate: function(attrs, options) {
@@ -21,6 +21,9 @@ $(function() {
 
 	window.SearchView = Backbone.View.extend({
 		el : '.wall',
+		events : {
+			'click .matchable' : 'showTile'
+		},
 		initialize : function(options){
 			var accessToken = "#",
     			url = 'https://api.instagram.com/v1/tags/'+ this.model.get('tag') +'/media/recent?access_token='+accessToken+'&callback=?&nocache=1'+ (new Date()).getTime(); 
@@ -50,6 +53,7 @@ $(function() {
 				length = picArray.length,
 				blkWidth = $(document).width()/col,
 				blkHeight = $(document).height()/row,
+				bgHeight = 'center '+(blkHeight+1)+'px',
 				newArray = [];
 
 			//if odd number, remove last tile and add a placeholder
@@ -69,10 +73,9 @@ $(function() {
 
 			//shuffle array of images
 			this.shuffle(newArray);
-
 			var template = _.template($("#wall").html(), { images : newArray});
-			this.$el.html(template);
-			$('.block').css({width:blkWidth, height:blkHeight});
+			this.$el.html(template); 
+			$('.block').css({width:blkWidth, height:blkHeight, backgroundPosition:bgHeight});
 			this.show(total);
 		},
 		show: function(total){
@@ -99,12 +102,18 @@ $(function() {
 			        if(b<total) blast(b); 
 					else{ 
 						clearInterval(showTile);
-						setTimeout(function(){ that.$el.find('.block').removeClass('visible'); alert('match game activated'); }, 2000);
+						setTimeout(function(){ 
+							that.$el.find('.block').removeClass('visible').addClass('matchable'); 
+							alert('match game activated'); 
+						}, 2000);
 					}
 			    }, 200);
 			},2000);
 			
 
+		},
+		showTile: function(e){
+			$(e.target).addClass('selected');
 		},
 		shuffle: function(shuffledArray){
 			var i = shuffledArray.length, j, temp;
